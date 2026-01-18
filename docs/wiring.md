@@ -16,6 +16,14 @@ Button signal (D2) <-------------------------- Button other leg
 Servo signal (D9)  <-------------------------- Servo signal wire
 ```
 
+## Trigger modes
+This project supports remote trigger options that land on the same button input:
+
+1. **HC-05/HC-06 Bluetooth module** (serial trigger)
+2. **Manual momentary pushbutton** (local fallback)
+
+If multiple trigger devices are installed, they should share the same D2 input and GND so each device acts like a button press.
+
 ## Optional Bluetooth trigger (HC-05 / HC-06)
 ```
 HC-05 TX ----> D10 (BT RX)
@@ -25,13 +33,17 @@ HC-05 GND ---> GND
 ```
 Enable Bluetooth by setting `ENABLE_BLUETOOTH` to `1` in the firmware, then send the character `D` to trigger a drop.
 
-## Wiegand device trigger options
-Wiegand readers typically output data lines (`D0`/`D1`). The simplest path is to use a Wiegand-capable controller or keypad **with a relay/door output** and wire that relay contact to the button input:
+**How to trigger from a phone app or browser**
+- **Phone app (classic Bluetooth SPP)**: Pair to the module and open a serial terminal app (e.g., “Serial Bluetooth Terminal” on Android or similar iOS apps for BLE-capable modules). Connect and send the single character `D`.
+- **Web browser**: Standard HC-05/HC-06 modules use classic Bluetooth SPP, which **is not supported by Web Bluetooth** in browsers. If you require a browser-based trigger, use a BLE-capable module (e.g., HM-10) and update the firmware to read from its BLE serial characteristic instead of SoftwareSerial.
 
-- Relay COM → GND
-- Relay NO → D2 (button input)
+**Preventing unauthorized triggers**
+- Change the module’s default pairing PIN and device name in AT mode (e.g., PIN `1234` → custom).
+- Only enable pairing while commissioning; disable or secure pairing afterward if the module supports it.
 
-This keeps the project consent-based while allowing authorized Wiegand badges/keypads to trigger a drop.
+## Power for Arduino and servo
+- Use a **single 5V source** (USB power bank or 4xAA pack) for the Arduino and servo.
+- Avoid powering the servo from the Arduino USB port directly; route 5V to both Arduino 5V and servo V+ as shown above.
 
 ## Notes
 - Use **INPUT_PULLUP** on D2, so the button connects D2 to GND when pressed.

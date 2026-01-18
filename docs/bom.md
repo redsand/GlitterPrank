@@ -12,8 +12,11 @@
 | Capacitor 470–1000uF, 6.3V+ | 1 | Servo power stability | $1–$3 |
 | Hookup wire | 1 set | 22–26 AWG | $2–$6 |
 | Confetti (paper) | 1 bag | No glitter | $3–$10 |
+| HC-05/HC-06 Bluetooth module (optional) | 1 | For wireless trigger via serial | $4–$12 |
+| Resistors for BT RX divider (optional) | 2 | E.g., 1k/2k or 1k/2.2k | $1–$3 |
 
 **Notes**
 - SG90 is smaller and fits the default servo bay.
 - For MG90S, enlarge the servo bay (`servo_bay_w`, `servo_bay_l`).
 - If magnets are loose, use epoxy or CA glue.
+- Bluetooth modules often expect 3.3V logic; add a divider on the module RX line if required.
