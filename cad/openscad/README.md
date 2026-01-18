@@ -1,7 +1,11 @@
 # OpenSCAD Sources
 
-Open `confetti_dropper.scad` in OpenSCAD. Use the `part` variable at the top to select which piece to render:
+Open `confetti_dropper.scad` in OpenSCAD. Use the `model` and `part` variables at the top to select which size and piece to render:
 
+- `model` options:
+  - `standard` (original size with a single servo bay)
+  - `xl` (4.5 ft length with 2.5 in height/depth and three evenly spaced servo bays)
+- Wire-retention clips are integrated along the rear interior wall to keep servo leads snug against the lining.
 - `left_body`
 - `right_body`
 - `lid_left`
