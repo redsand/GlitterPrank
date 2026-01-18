@@ -4,16 +4,20 @@
 ```
 5V (USB/AA pack) ----+--------------------+----> Arduino 5V
                      |                    |
-                     |                    +----> Servo V+
+                     |                    +----> Servo 1 V+
+                     |                    +----> Servo 2 V+
+                     |                    +----> Servo 3 V+
                      |
 GND -----------------+--------------------+----> Arduino GND
                      |                    |
-                     |                    +----> Servo GND
+                     |                    +----> Servo 1 GND
+                     |                    +----> Servo 2 GND
+                     |                    +----> Servo 3 GND
                      |
                      +----> Button GND
 
 Button signal (D2) <-------------------------- Button other leg
-Servo signal (D9)  <-------------------------- Servo signal wire
+Servo signal (D9)  <-------------------------- Servo 1/2/3 signal (shared line or splitter)
 ```
 
 ## Trigger modes
@@ -51,6 +55,7 @@ Enable Bluetooth by setting `ENABLE_BLUETOOTH` to `1` in the firmware, then send
 - Use **INPUT_PULLUP** on D2, so the button connects D2 to GND when pressed.
 - Keep servo power wiring short and thick to reduce voltage drop.
 - Add a **470–1000uF capacitor** across 5V and GND near the servo.
+- For the XL model, use a **servo splitter** (or a small distribution board) to share the D9 signal across three servos, and size the 5V supply accordingly.
 
 ## Common mistakes
 - Forgetting a **common ground** between the Arduino and servo.

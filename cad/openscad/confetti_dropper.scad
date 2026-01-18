@@ -2,11 +2,12 @@
 // Parametric, split for 200x200mm print beds
 
 part = "left_body"; // left_body, right_body, lid_left, lid_right, gate, alignment_pin, servo_horn_adapter
+model = "xl"; // standard, xl
 
 // Global parameters
-body_length = 260; // mm
-body_width = 55;
-body_height = 55;
+body_length = model == "xl" ? 1372 : 260; // mm (4.5 ft / 54 in for XL)
+body_width = model == "xl" ? 63.5 : 55; // 2.5 in depth for XL
+body_height = model == "xl" ? 63.5 : 55; // 2.5 in height for XL
 wall = 2.4;
 
 half_length = body_length / 2;
@@ -31,7 +32,13 @@ hinge_knuckle_len = 8;
 servo_bay_l = 26;
 servo_bay_w = 13;
 servo_bay_h = 23;
-servo_bay_offset = 20; // from left end
+servo_bay_offset = 20; // from left end (standard model)
+
+wire_clip_len = 8;
+wire_clip_depth = 4;
+wire_clip_height = 6;
+wire_clip_d = 3.5;
+wire_clip_offsets = [-10, 10];
 
 lip_height = 2.0;
 lid_thickness = 2.0;
@@ -100,9 +107,26 @@ module hinge_mounts(x_offset) {
   }
 }
 
+module wire_clip(x_pos) {
+  translate([
+    x_pos - wire_clip_len / 2,
+    body_width - wall - wire_clip_depth,
+    body_height - wall - wire_clip_height
+  ])
+    difference() {
+      cube([wire_clip_len, wire_clip_depth, wire_clip_height]);
+      translate([wire_clip_len / 2, wire_clip_depth + 0.1, wire_clip_height / 2])
+        rotate([90, 0, 0])
+          cylinder(d = wire_clip_d, h = wire_clip_depth + 0.2, $fn = 24);
+    }
+}
+
 module body_half(is_left=true) {
   half_len = body_length / 2;
   x_offset = is_left ? 0 : 0;
+  servo_positions = model == "xl"
+    ? [body_length / 6, body_length / 2, body_length * 5 / 6]
+    : [servo_bay_offset];
 
   difference() {
     rounded_cube([half_len, body_width, body_height], r=2);
@@ -119,10 +143,13 @@ module body_half(is_left=true) {
     ])
       cube([chute_length, chute_width, wall + 0.2]);
 
-    // Servo bay (left half only)
-    if (is_left) {
-      translate([servo_bay_offset, wall, body_height - servo_bay_h - wall])
-        cube([servo_bay_l, servo_bay_w, servo_bay_h]);
+    // Servo bays
+    for (pos = servo_positions) {
+      if ((is_left && pos < half_len) || (!is_left && pos >= half_len)) {
+        let(local_pos = is_left ? pos : pos - half_len)
+          translate([local_pos, wall, body_height - servo_bay_h - wall])
+            cube([servo_bay_l, servo_bay_w, servo_bay_h]);
+      }
     }
 
     // Magnet pockets (rear face)
@@ -135,6 +162,16 @@ module body_half(is_left=true) {
 
   // Hinge mounts on bottom edge (one side of chute)
   hinge_mounts((half_len - chute_length) / 2);
+
+  // Wire clips along the rear interior to retain servo leads
+  for (pos = servo_positions) {
+    if ((is_left && pos < half_len) || (!is_left && pos >= half_len)) {
+      for (offset = wire_clip_offsets) {
+        let(local_pos = is_left ? pos : pos - half_len)
+          wire_clip(local_pos + offset);
+      }
+    }
+  }
 
   // Gate stop ridge
   translate([
