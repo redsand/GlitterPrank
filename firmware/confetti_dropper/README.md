@@ -20,7 +20,8 @@ Arduino Nano-compatible firmware for a consent-based paper confetti dropper. It 
 
 ### Triggering & access control notes
 - HC-05/HC-06 use classic Bluetooth SPP; typical workflow is **pair → connect in a serial terminal → send `D`**.
-- Web browsers generally **cannot** talk to classic SPP modules. For browser-based triggers, plan on a BLE module (e.g., HM-10) and firmware changes to read BLE serial.
+- HM-10 uses BLE; connect with a BLE terminal app and send `D` to its UART characteristic.
+- Web browsers work with BLE modules like HM-10, but **cannot** talk to classic SPP modules. For browser-based triggers, plan on HM-10 and firmware changes to read BLE serial.
 - To reduce unauthorized triggers, change the module’s **default PIN** and **device name** in AT mode before deployment.
 
 ## Calibration mode

@@ -12,7 +12,7 @@
 | Capacitor 470–1000uF, 6.3V+ | 1 | Servo power stability | $1–$3 |
 | Hookup wire | 1 set | 22–26 AWG | $2–$6 |
 | Confetti (paper) | 1 bag | No glitter | $3–$10 |
-| HC-05/HC-06 Bluetooth module (optional) | 1 | For wireless trigger via serial | $4–$12 |
+| HC-05/HC-06 or HM-10 Bluetooth module (optional) | 1 | For wireless trigger via serial | $4–$12 |
 | Resistors for BT RX divider (optional) | 2 | E.g., 1k/2k or 1k/2.2k | $1–$3 |
 
 **Notes**
